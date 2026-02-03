@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Resume and professional experience of a Java Software Development Engineer">
+  <meta name="keywords" content="Resume, CV, Java Developer, Work Experience, Skills">
+  <title>Resume - Java SDE Portfolio</title>
+  
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Page Header -->
+  <section class="hero" style="min-height: 50vh;">
+    <div class="container hero-content">
+      <h1 class="hero-title">Resume</h1>
+      <p class="hero-subtitle" id="resume-subtitle">Loading...</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="window.print()">📄 Download PDF</button>
+        <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Work Experience</h2>
+      <div class="grid" style="grid-template-columns: 1fr; gap: var(--space-6);" id="experience-container">
+        Loading...
+      </div>
+    </div>
+  </section>
+
+  <!-- Education Section -->
+  <section class="section" style="background: var(--color-surface);">
+    <div class="container">
+      <h2 class="section-title">Education</h2>
+      <div class="grid grid-2" id="education-container">
+        Loading...
+      </div>
+    </div>
+  </section>
+
+  <!-- Certifications Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="section-title">Certifications</h2>
+      <div class="grid grid-2" id="certifications-container">
+        Loading...
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="section" style="background: var(--color-surface);">
+    <div class="container">
+      <h2 class="section-title">Skills & Technologies</h2>
+      <div id="skills-container">
+        Loading...
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/theme.js"></script>
+  
+  <!-- Page-specific script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Populate subtitle
+      document.getElementById('resume-subtitle').textContent = portfolioData.personal.title;
+      
+      // Populate experience
+      const experienceContainer = document.getElementById('experience-container');
+      experienceContainer.innerHTML = portfolioData.experience
+        .map(exp => createExperienceCard(exp))
+        .join('');
+      
+      // Populate education
+      const educationContainer = document.getElementById('education-container');
+      educationContainer.innerHTML = portfolioData.education
+        .map(edu => `
+          <div class="card">
+            <h3 class="card-title">${edu.degree}</h3>
+            <h4 style="color: var(--color-primary); margin-bottom: var(--space-3);">${edu.institution}</h4>
+            <div class="card-meta mb-4">
+              <span>📅 ${edu.duration}</span>
+              <span>🎓 ${edu.grade}</span>
+            </div>
+            <p class="card-text">${edu.description}</p>
+          </div>
+        `)
+        .join('');
+      
+      // Populate certifications
+      const certificationsContainer = document.getElementById('certifications-container');
+      if (portfolioData.certifications.length > 0) {
+        certificationsContainer.innerHTML = portfolioData.certifications
+          .map(cert => `
+            <div class="card">
+              <h3 class="card-title">${cert.name}</h3>
+              <p style="color: var(--color-primary); font-weight: 600; margin-bottom: var(--space-2);">
+                ${cert.issuer}
+              </p>
+              <p class="text-muted">Issued: ${cert.date}</p>
+              ${cert.credentialUrl !== '#' ? 
+                `<a href="${cert.credentialUrl}" target="_blank" class="btn btn-secondary mt-4">View Credential →</a>` : 
+                ''
+              }
+            </div>
+          `)
+          .join('');
+      } else {
+        certificationsContainer.innerHTML = '<p class="text-center text-muted">No certifications listed.</p>';
+      }
+      
+      // Populate skills
+      document.getElementById('skills-container').innerHTML = createSkillsSection();
+    });
+  </script>
+
+  <style>
+    .skill-tag {
+      display: inline-block;
+      padding: var(--space-2) var(--space-4);
+      background: var(--color-surface-elevated);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text);
+      transition: all var(--transition-fast);
+    }
+    
+    .skill-tag:hover {
+      background: var(--color-primary);
+      color: white;
+      border-color: var(--color-primary);
+      transform: translateY(-2px);
+    }
+
+    @media print {
+      .navbar, .footer, .btn {
+        display: none;
+      }
+      
+      .hero {
+        min-height: auto !important;
+        padding: var(--space-8) 0;
+      }
+      
+      .section {
+        padding: var(--space-8) 0;
+      }
+      
+      .card {
+        break-inside: avoid;
+        box-shadow: none;
+        border: 1px solid #ddd;
+      }
+    }
+  </style>
+</body>
+</html>

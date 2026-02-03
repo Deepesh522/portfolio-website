@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio of a Java Software Development Engineer - Building scalable applications and solving complex problems"
+    />
+    <meta
+      name="keywords"
+      content="Java Developer, Software Engineer, Spring Boot, Microservices, Backend Development"
+    />
+    <meta name="author" content="Your Name" />
+    <title>Home - Java SDE Portfolio</title>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- Favicon (optional - add later) -->
+    <!-- <link rel="icon" type="image/png" href="assets/icons/favicon.png"> -->
+  </head>
+  <body>
+    <!-- Navigation -->
+    <div id="navbar-placeholder"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-content">
+        <h1 class="hero-title" id="hero-name">Loading...</h1>
+        <p class="hero-subtitle" id="hero-tagline">Loading...</p>
+        <div class="hero-cta">
+          <a href="resume.html" class="btn btn-primary">View Resume</a>
+          <a href="contact.html" class="btn btn-secondary">Get in Touch</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">About Me</h2>
+        <div style="max-width: 800px; margin: 0 auto; text-align: center">
+          <p
+            id="about-bio"
+            style="
+              font-size: var(--text-lg);
+              color: var(--color-text-secondary);
+            "
+          >
+            Loading...
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section class="section" style="background: var(--color-surface)">
+      <div class="container">
+        <h2 class="section-title">Skills & Technologies</h2>
+        <div id="skills-container">Loading...</div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title">What People Say</h2>
+
+        <!-- Existing Testimonials -->
+        <div class="grid grid-3 mb-8" id="testimonials-container">
+          Loading...
+        </div>
+
+        <!-- Add Testimonial Form -->
+        <div style="max-width: 600px; margin: 0 auto">
+          <div class="card">
+            <h3 class="card-title text-center">Share Your Thoughts</h3>
+            <p class="text-center text-muted mb-6">
+              Worked with me? I'd love to hear your feedback!
+            </p>
+
+            <form
+              id="testimonial-form"
+              onsubmit="handleTestimonialSubmit(event)"
+            >
+              <div class="form-group">
+                <label for="testimonial-name" class="form-label"
+                  >Your Name *</label
+                >
+                <input
+                  type="text"
+                  id="testimonial-name"
+                  class="form-input"
+                  placeholder="John Doe"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="testimonial-role" class="form-label"
+                  >Your Role/Company *</label
+                >
+                <input
+                  type="text"
+                  id="testimonial-role"
+                  class="form-input"
+                  placeholder="Senior Developer at Company X"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="testimonial-message" class="form-label"
+                  >Your Message *</label
+                >
+                <textarea
+                  id="testimonial-message"
+                  class="form-textarea"
+                  placeholder="Share your experience working with me..."
+                  required
+                  minlength="20"
+                ></textarea>
+              </div>
+
+              <button type="submit" class="btn btn-primary" style="width: 100%">
+                Submit Testimonial
+              </button>
+
+              <p
+                class="text-muted text-center mt-4"
+                style="font-size: var(--text-sm)"
+              >
+                Your testimonial will be reviewed before being published.
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/components.js"></script>
+    <script src="js/theme.js"></script>
+
+    <!-- Page-specific script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        // Populate hero section
+        document.getElementById("hero-name").textContent =
+          portfolioData.personal.name;
+        document.getElementById("hero-tagline").textContent =
+          portfolioData.personal.tagline;
+
+        // Populate about section
+        document.getElementById("about-bio").textContent =
+          portfolioData.personal.bio;
+
+        // Populate skills
+        document.getElementById("skills-container").innerHTML =
+          createSkillsSection();
+
+        // Populate testimonials
+        const testimonialsContainer = document.getElementById(
+          "testimonials-container",
+        );
+        const approvedTestimonials = portfolioData.testimonials.filter(
+          (t) => t.approved,
+        );
+
+        if (approvedTestimonials.length > 0) {
+          testimonialsContainer.innerHTML = approvedTestimonials
+            .map((testimonial) => createTestimonialCard(testimonial))
+            .join("");
+        } else {
+          testimonialsContainer.innerHTML =
+            '<p class="text-center text-muted">No testimonials yet. Be the first to share your thoughts!</p>';
+        }
+      });
+    </script>
+
+    <!-- Add skill tag styles -->
+    <style>
+      .skill-tag {
+        display: inline-block;
+        padding: var(--space-2) var(--space-4);
+        background: var(--color-surface-elevated);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-full);
+        font-size: var(--text-sm);
+        font-weight: 500;
+        color: var(--color-text);
+        transition: all var(--transition-fast);
+      }
+
+      .skill-tag:hover {
+        background: var(--color-primary);
+        color: white;
+        border-color: var(--color-primary);
+        transform: translateY(-2px);
+      }
+
+      .tag {
+        display: inline-block;
+        padding: var(--space-1) var(--space-3);
+        background: var(--color-surface-elevated);
+        border-radius: var(--radius-full);
+        font-size: var(--text-xs);
+        color: var(--color-primary);
+        font-weight: 600;
+      }
+    </style>
+  </body>
+</html>
