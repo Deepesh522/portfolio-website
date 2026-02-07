@@ -30,3 +30,7 @@ build/
 # Temporary files
 *.tmp
 .cache/
+
+# Documentation
+implementation_plan.md
+walkthrough.md
