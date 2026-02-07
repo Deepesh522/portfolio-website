@@ -11,14 +11,14 @@
       name="keywords"
       content="Java Developer, Software Engineer, Spring Boot, Microservices, Backend Development"
     />
-    <meta name="author" content="Your Name" />
-    <title>Home - Java SDE Portfolio</title>
+    <meta name="author" content="Deepesh Panwar" />
+    <title>DP</title>
 
     <!-- Stylesheet -->
     <link rel="stylesheet" href="css/styles.css" />
 
-    <!-- Favicon (optional - add later) -->
-    <!-- <link rel="icon" type="image/png" href="assets/icons/favicon.png"> -->
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/icons/favicon.png">
   </head>
   <body>
     <!-- Navigation -->
@@ -63,16 +63,16 @@
     </section>
 
     <!-- Testimonials Section -->
+    <!-- Testimonials Section (Hidden) -->
+    <!--
     <section class="section">
       <div class="container">
         <h2 class="section-title">What People Say</h2>
 
-        <!-- Existing Testimonials -->
         <div class="grid grid-3 mb-8" id="testimonials-container">
           Loading...
         </div>
 
-        <!-- Add Testimonial Form -->
         <div style="max-width: 600px; margin: 0 auto">
           <div class="card">
             <h3 class="card-title text-center">Share Your Thoughts</h3>
@@ -138,6 +138,7 @@
         </div>
       </div>
     </section>
+    -->
 
     <!-- Footer -->
     <div id="footer-placeholder"></div>
@@ -168,17 +169,19 @@
         const testimonialsContainer = document.getElementById(
           "testimonials-container",
         );
-        const approvedTestimonials = portfolioData.testimonials.filter(
-          (t) => t.approved,
-        );
+        if (testimonialsContainer) {
+            const approvedTestimonials = portfolioData.testimonials.filter(
+              (t) => t.approved,
+            );
 
-        if (approvedTestimonials.length > 0) {
-          testimonialsContainer.innerHTML = approvedTestimonials
-            .map((testimonial) => createTestimonialCard(testimonial))
-            .join("");
-        } else {
-          testimonialsContainer.innerHTML =
-            '<p class="text-center text-muted">No testimonials yet. Be the first to share your thoughts!</p>';
+            if (approvedTestimonials.length > 0) {
+              testimonialsContainer.innerHTML = approvedTestimonials
+                .map((testimonial) => createTestimonialCard(testimonial))
+                .join("");
+            } else {
+              testimonialsContainer.innerHTML =
+                '<p class="text-center text-muted">No testimonials yet. Be the first to share your thoughts!</p>';
+            }
         }
       });
     </script>
@@ -198,9 +201,9 @@
       }
 
       .skill-tag:hover {
-        background: var(--color-primary);
+        background: #6b8e23;
         color: white;
-        border-color: var(--color-primary);
+        border-color: #6b8e23;
         transform: translateY(-2px);
       }
 

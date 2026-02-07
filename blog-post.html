@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Blog post details">
+  <title>Blog Post - Deepesh Panwar</title>
+  
+  <link rel="icon" type="image/png" href="assets/icons/favicon.png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <!-- Navigation -->
+  <div id="navbar-placeholder"></div>
+
+  <!-- Blog Post Content -->
+  <article class="section">
+    <div class="container" style="max-width: 800px;"> <!-- Centered and limited width -->
+      <a href="blog.html" class="btn btn-secondary mb-6">← Back to Blog</a>
+      
+      <header class="mb-8">
+        <div class="card-meta mb-4">
+          <span id="post-date">Loading...</span>
+          <span id="post-read-time">Loading...</span>
+        </div>
+        <h1 id="post-title" style="margin-bottom: var(--space-4);">Loading...</h1>
+        <div id="post-tags" class="mb-6"></div>
+      </header>
+      
+      <div class="card" style="border: none; background: transparent; box-shadow: none; padding: 0;">
+        <div id="post-content" style="font-size: var(--text-lg); line-height: 1.8; color: var(--color-text-secondary);">
+          Loading content...
+        </div>
+      </div>
+      
+      <hr style="margin: var(--space-12) 0; border: 0; border-top: 1px solid var(--color-border);">
+      
+      <!-- Author Bio (Mini) -->
+      <div class="card flex-center" style="gap: var(--space-4); justify-content: flex-start;">
+        <img src="assets/icons/favicon.png" alt="Author" style="width: 60px; height: 60px; border-radius: 50%;">
+        <div>
+          <h4 style="margin-bottom: var(--space-1);">Deepesh Panwar</h4>
+          <p class="text-muted" style="margin-bottom: 0;">Java Software Development Engineer</p>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/components.js"></script>
+  <script src="js/theme.js"></script>
+  
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Get post ID from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const postId = parseInt(urlParams.get('id'));
+      
+      // Find post in data
+      const post = portfolioData.blogPosts.find(p => p.id === postId);
+      
+      if (post) {
+        // Populate content
+        document.title = `${post.title} - Deepesh Panwar`;
+        document.getElementById('post-title').textContent = post.title;
+        document.getElementById('post-date').textContent = `📅 ${formatDate(post.date)}`;
+        document.getElementById('post-read-time').textContent = `⏱️ ${post.readTime}`;
+        
+        // Tags
+        const tagsHtml = post.tags.map(tag => `<span class="tag">#${tag}</span>`).join(' ');
+        document.getElementById('post-tags').innerHTML = tagsHtml;
+        
+        // Content (Use full content if available, otherwise lorem ipsum)
+        const fullContent = post.content || `
+          <p class="mb-4">${post.excerpt}</p>
+          <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+          <h3 class="mb-4">Key Concepts</h3>
+          <p class="mb-4">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+          <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+            <li class="mb-2">Understanding the core principles</li>
+            <li class="mb-2">Implementing best practices in your workflow</li>
+            <li class="mb-2">Optimizing for performance and scalability</li>
+          </ul>
+          <p class="mb-4">Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+          <p>Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.</p>
+        `;
+        
+        document.getElementById('post-content').innerHTML = fullContent;
+      } else {
+        // Post not found
+        document.querySelector('.container').innerHTML = `
+          <div class="text-center" style="padding: var(--space-20) 0;">
+            <h2>Post Not Found</h2>
+            <p class="mb-8">The blog post you're looking for doesn't exist.</p>
+            <a href="blog.html" class="btn btn-primary">Go to Blog</a>
+          </div>
+        `;
+      }
+    });
+
+    // Helper to format date (duplicated from components.js if needed, strictly speaking components.js loads first so it should be available)
+    function formatDate(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('en-US', options);
+    }
+  </script>
+</body>
+</html>

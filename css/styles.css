@@ -370,11 +370,7 @@ code {
 }
 
 .btn-primary {
-  background: linear-gradient(
-    135deg,
-    var(--color-primary),
-    var(--color-secondary)
-  );
+  background: linear-gradient(135deg, #6b8e23, #808000);
   color: white;
   box-shadow: var(--shadow-sm);
 }

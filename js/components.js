@@ -73,7 +73,7 @@ function createBlogCard(post) {
       <div class="card-meta">
         ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join(' ')}
       </div>
-      <a href="#" class="btn btn-secondary mt-4">Read More →</a>
+      <a href="blog-post.html?id=${post.id}" class="btn btn-secondary mt-4">Read More →</a>
     </article>
   `;
 }
@@ -256,30 +256,19 @@ function handleContactSubmit(event) {
   event.preventDefault();
   
   const form = event.target;
-  const formData = {
-    name: form.querySelector('#contact-name').value,
-    email: form.querySelector('#contact-email').value,
-    subject: form.querySelector('#contact-subject').value,
-    message: form.querySelector('#contact-message').value,
-    date: new Date().toISOString()
-  };
+  const name = form.querySelector('#contact-name').value;
+  const email = form.querySelector('#contact-email').value;
+  const subject = form.querySelector('#contact-subject').value;
+  const message = form.querySelector('#contact-message').value;
   
-  // TODO: Replace with actual API call when backend is ready
-  console.log('Contact form submitted:', formData);
+  // Construct mailto link
+  // Use portfolio owner's email from data.js
+  const myEmail = portfolioData.personal.email;
+  const mailtoLink = `mailto:${myEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`)}`;
   
-  // Show success message
-  alert('Thank you for your message! I will get back to you soon.');
-  form.reset();
+  // Open default email client
+  window.location.href = mailtoLink;
   
-  /* When backend is ready, use this:
-  submitContactForm(formData)
-    .then(response => {
-      alert('Thank you for your message! I will get back to you soon.');
-      form.reset();
-    })
-    .catch(error => {
-      alert('Sorry, there was an error sending your message. Please try again.');
-      console.error(error);
-    });
-  */
+  // Optional: Show feedback
+  // alert('Opening your email client to send the message...');
 }
