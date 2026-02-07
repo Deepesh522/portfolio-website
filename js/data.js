@@ -96,77 +96,137 @@ const portfolioData = {
   blogPosts: [
     {
       id: 1,
-      title: "Building Scalable Microservices with Spring Boot",
-      excerpt: "Learn how to design and implement microservices architecture using Spring Boot, with best practices for scalability and maintainability.",
+      title: "Building a Dynamic Kafka Publishing Factory",
+      excerpt: "I built a dynamic Kafka Publishing Factory that allows consuming from multiple Kafka topics at runtime — without redeployments — while supporting per-topic authentication and enterprise security constraints. Using a factory pattern and runtime topic registration APIs, teams can onboard themselves by submitting their principals and start publishing instantly, even under strict infrastructure policies like no mounted storage.",
       content: `
-        <p class="mb-4">Microservices have become the de facto standard for building scalable, complex applications. In this guide, we'll explore how to leverage Spring Boot to build robust microservices.</p>
+        <p class="mb-4">Most Kafka systems are built with a simple assumption: <strong>topics are known ahead of time.</strong></p>
+        <p class="mb-4">But in real enterprise environments, that assumption breaks fast.</p>
         
-        <h3>Why Microservices?</h3>
-        <p class="mb-4">Monolithic applications can become difficult to maintain and scale as they grow. Microservices solve this by breaking the application into smaller, independent services that can be developed, deployed, and scaled individually.</p>
-        
-        <h3>Key Principles</h3>
         <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
-          <li class="mb-2"><strong>Single Responsibility:</strong> Each service should do one thing and do it well.</li>
-          <li class="mb-2"><strong>Loose Coupling:</strong> Services should minimize dependencies on each other.</li>
-          <li class="mb-2"><strong>High Cohesion:</strong> Related functionality should stay together within a service.</li>
+          <li class="mb-2">Different teams need different topics.</li>
+          <li class="mb-2">Each team needs different authentication.</li>
+          <li class="mb-2">Security policies restrict storage access.</li>
+          <li class="mb-2">And redeploying services every time a new topic is added quickly becomes painful.</li>
         </ul>
-        
-        <h3>Implementing with Spring Boot</h3>
-        <p class="mb-4">Spring Boot makes it incredibly easy to get started. With its auto-configuration and embedded server, you can have a service running in minutes.</p>
-        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      `,
-      date: "2024-01-15",
-      readTime: "8 min read",
-      tags: ["Java", "Spring Boot", "Microservices"],
-      slug: "building-scalable-microservices-spring-boot"
-    },
-    {
-      id: 2,
-      title: "Understanding Java Memory Management",
-      excerpt: "Deep dive into Java's memory model, garbage collection, and optimization techniques for better application performance.",
-      content: `
-        <p class="mb-4">Java memory management is a critical aspect of performance tuning. Understanding the Stack and Heap is fundamental to writing efficient Java code.</p>
-        
-        <h3>The Stack and The Heap</h3>
-        <p class="mb-4">Java memory is divided into two main parts: the Stack and the Heap. The Stack stores primitives and object references, while the Heap stores the actual objects.</p>
-        
-        <h3>Garbage Collection</h3>
-        <p class="mb-4">The Garbage Collector (GC) is responsible for reclaiming memory used by objects that are no longer reachable. Understanding how different GC algorithms work can help you tune your application.</p>
-        
-        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-        <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-      `,
-      date: "2023-12-10",
-      readTime: "10 min read",
-      tags: ["Java", "Performance", "JVM"],
-      slug: "understanding-java-memory-management"
-    },
-    {
-      id: 3,
-      title: "REST API Best Practices in 2024",
-      excerpt: "A comprehensive guide to designing robust, secure, and developer-friendly REST APIs with modern best practices.",
-      content: `
-        <p class="mb-4">Designing a great REST API is more art than science. It requires balancing standards with pragmatism.</p>
-        
-        <h3>Resource Naming</h3>
-        <p class="mb-4">Use nouns, not verbs. Use plural nouns for collections. For example, <code>/users</code> instead of <code>/getUsers</code>.</p>
-        
-        <h3>HTTP Methods</h3>
+
+        <p class="mb-4">This is the story of how I built a Kafka Publishing Factory from scratch — a system that dynamically consumes from multiple Kafka topics at runtime, supports per-topic principals, and works within strict infrastructure constraints — all without service restarts.</p>
+
+        <h3>The Problem I Was Trying to Solve</h3>
+        <p class="mb-4">In our environment:</p>
         <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
-          <li class="mb-2"><strong>GET:</strong> Retrieve a resource</li>
-          <li class="mb-2"><strong>POST:</strong> Create a resource</li>
-          <li class="mb-2"><strong>PUT:</strong> Update a resource (replace)</li>
-          <li class="mb-2"><strong>PATCH:</strong> Update a resource (partial)</li>
-          <li class="mb-2"><strong>DELETE:</strong> Delete a resource</li>
+          <li class="mb-2">Multiple internal teams wanted to publish and consume Kafka messages</li>
+          <li class="mb-2">Each team had its own principal, credentials, and auth configs</li>
+          <li class="mb-2">We were restricted by company policy from mounting external storage</li>
+          <li class="mb-2">Adding a topic traditionally required code changes and redeployment</li>
         </ul>
+        <p class="mb-4">We needed something better: A Kafka layer that felt self-service, but stayed secure, controlled, and enterprise-compliant.</p>
+
+        <h3>The Core Idea: Kafka as a Runtime Service</h3>
+        <p class="mb-4">Instead of hardcoding Kafka consumers, I designed the system around a factory pattern:</p>
+        <p class="mb-4"><em>“Kafka consumers should be created dynamically, not statically.”</em></p>
+        <p class="mb-4">This led to a Kafka Publishing Factory that:</p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2">Builds consumers at runtime</li>
+          <li class="mb-2">Injects topic-specific authentication</li>
+          <li class="mb-2">Registers and manages them centrally</li>
+          <li class="mb-2">Starts consuming immediately — no redeploys</li>
+        </ul>
+        <p class="mb-4">Kafka became a runtime capability, not a compile-time dependency.</p>
+
+        <h3>High-Level Architecture</h3>
+        <p class="mb-4"><code>Client → REST API → Topic Registry → Kafka Consumer Factory → Kafka Cluster</code></p>
         
-        <p class="mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <p class="mb-4"><strong>Key Components:</strong></p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2"><strong>Kafka Consumer Factory</strong> – Builds consumers dynamically</li>
+          <li class="mb-2"><strong>Runtime Topic Registry</strong> – Tracks active topics and consumers</li>
+          <li class="mb-2"><strong>Security Validator</strong> – Verifies principals and auth configs</li>
+          <li class="mb-2"><strong>REST API Layer</strong> – Allows teams to onboard themselves</li>
+        </ul>
+        <p class="mb-4">Each piece is isolated, making the system scalable and maintainable.</p>
+
+        <h3>Consuming From Multiple Topics at Runtime</h3>
+        <p class="mb-4">Once the factory was in place, supporting multiple topics simultaneously became natural. Each topic maps to: <code>Topic → Consumer Group → Consumer Instance</code></p>
+
+        <p class="mb-4">When a new topic is registered:</p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2">A consumer instance is created dynamically</li>
+          <li class="mb-2">It’s attached to the correct auth config</li>
+          <li class="mb-2">It starts polling immediately</li>
+          <li class="mb-2">The service keeps running uninterrupted</li>
+        </ul>
+        <p class="mb-4">No restarts. No downtime. No redeploys.</p>
+
+        <h3>Per-Topic Authentication & Principal Validation</h3>
+        <p class="mb-4">Security was non-negotiable. Each topic required a specific principal, its own authentication files, and strict validation before consumer startup.</p>
+        
+        <p class="mb-4">So the registration flow became:</p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2">✔ Validate topic</li>
+          <li class="mb-2">✔ Validate principal</li>
+          <li class="mb-2">✔ Load auth configs</li>
+          <li class="mb-2">✔ Test Kafka connectivity</li>
+          <li class="mb-2">✔ Start consumer</li>
+        </ul>
+        <p class="mb-4">If anything failed, the consumer never started — keeping the system safe by default.</p>
+
+        <h3>Runtime Topic Registration API</h3>
+        <p class="mb-4">To make this usable by other teams, I built a simple REST API:</p>
+        <pre><code class="language-json">POST /kafka/topics/register
+{
+  "topic": "orders.events",
+  "principal": "orders-team-principal",
+  "groupId": "orders-consumer-group"
+}</code></pre>
+        
+        <p class="mb-4">Behind the scenes, this:</p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2">Validates ownership</li>
+          <li class="mb-2">Loads credentials</li>
+          <li class="mb-2">Builds Kafka configs</li>
+          <li class="mb-2">Spins up a consumer dynamically</li>
+        </ul>
+        <p class="mb-4">From the team’s perspective, Kafka onboarding became: <em>“Call one API and you’re live.”</em></p>
+
+        <h3>The Hard Constraint: No Mounted Storage</h3>
+        <p class="mb-4">Here’s where things got interesting. Due to company policy:</p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2">❌ No mounted storage</li>
+          <li class="mb-2">❌ No uploading auth files dynamically</li>
+        </ul>
+        <p class="mb-4">Which meant we couldn’t accept new credential files at runtime.</p>
+
+        <h3>The Workaround</h3>
+        <p class="mb-4">Instead: Teams submit their principal/auth files to the platform team. These are bundled into the service classpath.</p>
+        <p class="mb-4">Once present, teams can dynamically register topics via API. So while credentials couldn’t be added dynamically, topics still could — as long as their principals already existed.</p>
+        <p class="mb-4">This gave us: <strong>Runtime flexibility, Security compliance, and Zero redeploys</strong>. All at once.</p>
+
+        <h3>Why the Factory Pattern Worked So Well</h3>
+        <p class="mb-4">The factory abstraction gave us:</p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2">🔁 Dynamic consumer creation</li>
+          <li class="mb-2">🔐 Centralized security handling</li>
+          <li class="mb-2">🚀 Zero-downtime onboarding</li>
+          <li class="mb-2">🧠 Clean separation between Kafka infra and business logic</li>
+        </ul>
+        <p class="mb-4">Kafka became an internal platform, not just a messaging system.</p>
+
+        <h3>What I Learned</h3>
+        <p class="mb-4">This project changed how I think about distributed systems:</p>
+        <ul style="margin-bottom: var(--space-6); padding-left: var(--space-6);">
+          <li class="mb-2">Kafka consumers don’t need to be static</li>
+          <li class="mb-2">Security configs should be modeled as runtime objects</li>
+          <li class="mb-2">Infrastructure constraints often force better architecture</li>
+          <li class="mb-2">Factory patterns scale beautifully in messaging systems</li>
+        </ul>
+
+        <h3>Final Thoughts</h3>
+        <p class="mb-4">This Kafka Publishing Factory turned Kafka into a self-service, runtime-configurable messaging layer — while staying compliant with enterprise security and infrastructure policies. If you’re building Kafka systems in restricted enterprise environments, this approach gives you flexibility without sacrificing control.</p>
       `,
-      date: "2023-11-20",
-      readTime: "6 min read",
-      tags: ["API", "REST", "Backend"],
-      slug: "rest-api-best-practices-2024"
+      date: "2024-02-07",
+      readTime: "4 min read",
+      tags: ["Kafka", "System Design", "Java", "Backend"],
+      slug: "dynamic-kafka-publishing-factory"
     }
   ],
 
