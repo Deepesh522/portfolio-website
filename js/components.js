@@ -47,7 +47,7 @@ function createFooter() {
             <ul class="footer-links">
               <li><a href="${portfolioData.personal.social.github}" target="_blank">GitHub</a></li>
               <li><a href="${portfolioData.personal.social.linkedin}" target="_blank">LinkedIn</a></li>
-              <!-- <li><a href="${portfolioData.personal.social.twitter}" target="_blank">Twitter</a></li> -->
+              <li><a href="${portfolioData.personal.social.twitter}" target="_blank">Twitter</a></li>
               <li><a href="mailto:${portfolioData.personal.email}">Email</a></li>
             </ul>
           </div>
