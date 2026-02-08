@@ -78,6 +78,13 @@ const portfolioData = {
   certifications: [
     {
       id: 1,
+      name: "Low Level System Design, Design Patterns & SOLID Principles",
+      issuer: "Udemy",
+      date: "2026",
+      credentialUrl: "https://ude.my/UC-786aafd7-9edb-4071-bb21-133fd72eb67d"
+    },
+    {
+      id: 3,
       name: "JavaScript",
       issuer: "Udemy",
       date: "2022",
