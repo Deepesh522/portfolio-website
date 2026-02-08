@@ -84,6 +84,13 @@ const portfolioData = {
       credentialUrl: "https://ude.my/UC-786aafd7-9edb-4071-bb21-133fd72eb67d"
     },
     {
+      id: 2,
+      name: "SQL Programming Basics",
+      issuer: "Udemy",
+      date: "2024",
+      credentialUrl: "https://udemy-certificate.s3.amazonaws.com/pdf/UC-db6c0601-ae90-439b-82f9-30b31a3ccbf0.pdf"
+    },
+    {
       id: 3,
       name: "JavaScript",
       issuer: "Udemy",
@@ -91,7 +98,7 @@ const portfolioData = {
       credentialUrl: "https://www.udemy.com/certificate/UC-fb35bfbd-3316-4e61-9dd5-2344b1bdbf59/"
     },
     {
-      id: 2,
+      id: 4,
       name: "Data Structures and algorithms",
       issuer: "GeeksforGeeks",
       date: "2023",
