@@ -133,21 +133,33 @@
   <!-- Page-specific script -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Helper to safely set text content
+      const setText = (id, text) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+      };
+
+      // Helper to safely set href
+      const setHref = (id, href) => {
+        const el = document.getElementById(id);
+        if (el) el.href = href;
+      };
+
       // Populate contact information
-      document.getElementById('contact-email').textContent = portfolioData.personal.email;
-      document.getElementById('contact-location').textContent = portfolioData.personal.location;
+      setText('contact-email', portfolioData.personal.email);
+      setText('contact-location', portfolioData.personal.location);
       
       // Set email link
-      document.getElementById('email-link').href = `mailto:${portfolioData.personal.email}`;
+      setHref('email-link', `mailto:${portfolioData.personal.email}`);
       
       // Set phone number
-      document.getElementById('contact-phone').textContent = portfolioData.personal.phone;
-      document.getElementById('phone-link').href = `tel:${portfolioData.personal.phone}`;
+      setText('contact-phone', portfolioData.personal.phone);
+      setHref('phone-link', `tel:${portfolioData.personal.phone}`);
       
       // Set social links
-      document.getElementById('github-link').href = portfolioData.personal.social.github;
-      document.getElementById('linkedin-link').href = portfolioData.personal.social.linkedin;
-      document.getElementById('whatsapp-link').href = portfolioData.personal.social.whatsapp;
+      setHref('github-link', portfolioData.personal.social.github);
+      setHref('linkedin-link', portfolioData.personal.social.linkedin);
+      setHref('whatsapp-link', portfolioData.personal.social.whatsapp);
     });
   </script>
 </body>
